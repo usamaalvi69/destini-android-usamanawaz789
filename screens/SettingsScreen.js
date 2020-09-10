@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
+import * as firebase from 'firebase'
 
 const SettingsScreen = () => {
     return (
@@ -7,7 +8,7 @@ const SettingsScreen = () => {
         <Text>Settings Screen</Text>
         <Button
           title="Click Here"
-          onPress={() => alert('Button Clicked!')}
+          onPress={() => {firebase.auth().signOut()}}
         />
       </View>
     );

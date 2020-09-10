@@ -1,15 +1,11 @@
-import React from 'react';
+import React, {useState, useEffect, useContext}  from 'react';
 import { View, StyleSheet } from 'react-native';
 import {
     useTheme,
     Avatar,
     Title,
     Caption,
-    Paragraph,
-    Drawer,
-    Text,
-    TouchableRipple,
-    Switch
+    Drawer
 } from 'react-native-paper';
 import {
     DrawerContentScrollView,
@@ -17,13 +13,40 @@ import {
 } from '@react-navigation/drawer';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import{ AuthContext } from '../components/context';
+import * as firebase from 'firebase'
+import {UserContext} from './UserContext'
+
 
 export function DrawerContent(props) {
+    const [email, setEmail] = useState('');
+    const [anError, setAnError] = useState('');
+    const loginState = useContext(UserContext);
+    // console.log('__________')
+    // console.log(loginState)
+
+
+    useEffect(()=>{
+        // console.log('__________')
+      var user = firebase.auth().currentUser;
+
+     setEmail(user.email)
+
+    }, [])
+   
 
     const paperTheme = useTheme();
+    signMeOut = () => {
+        firebase.auth().signOut().then(function() {
+         loginState.customSignOut()
+          }).catch(function(error) {
+            setAnError(error)
+            // console.log(error)
+          });
+             
+        }
 
-    const { signOut, toggleTheme } = React.useContext(AuthContext);
+
+    // const { signOut, toggleTheme } = React.useContext(AuthContext);
 
     return(
         <View style={{flex:1}}>
@@ -40,7 +63,7 @@ export function DrawerContent(props) {
                             />
                             <View style={{marginLeft:15, flexDirection:'column'}}>
                                 <Title style={styles.title}>Usama Nawaz</Title>
-                                <Caption style={styles.caption}>@u_alvi</Caption>
+                            <Caption style={styles.caption}>{email}</Caption>
                             </View>
                         </View>
 
@@ -60,7 +83,7 @@ export function DrawerContent(props) {
                             label="Profile"
                             onPress={() => {props.navigation.navigate('Profile')}}
                         />
-                                                <DrawerItem 
+                        <DrawerItem 
                             icon={({color, size}) => (
                                 <Icon 
                                 name="cart-outline" 
@@ -80,7 +103,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="Favourites"
-                            onPress={() => {props.navigation.navigate('FavouritesScreen')}}
+                            // onPress={() => {props.navigation.navigate('FavouritesScreen')}}
                         />
 
                         <DrawerItem 
@@ -105,11 +128,11 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="Refer a friend"
-                            onPress={() => {props.navigation.navigate('SupportScreen')}}
+                            // onPress={() => {props.navigation.navigate('SupportScreen')}}
                         />
                     </Drawer.Section>
-                    <Drawer.Section title="Preferences">
-                        <TouchableRipple onPress={() => {toggleTheme()}}>
+                    {/* <Drawer.Section title="Preferences">
+                        <TouchableRipple>
                             <View style={styles.preference}>
                                 <Text>Dark Theme</Text>
                                 <View pointerEvents="none">
@@ -117,7 +140,7 @@ export function DrawerContent(props) {
                                 </View>
                             </View>
                         </TouchableRipple>
-                    </Drawer.Section>
+                    </Drawer.Section> */}
                 </View>
             </DrawerContentScrollView>
             <Drawer.Section style={styles.bottomDrawerSection}>
@@ -130,7 +153,7 @@ export function DrawerContent(props) {
                         />
                     )}
                     label="Sign Out"
-                    onPress={() => {signOut()}}
+                    onPress={signMeOut}
                 />
             </Drawer.Section>
         </View>
