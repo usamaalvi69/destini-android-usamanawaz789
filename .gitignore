@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 node_modules/**/*
 .expo/*
 npm-debug.*
@@ -11,3 +12,13 @@ web-build/
 
 # macOS
 .DS_Store
+=======
+.gradle
+/.idea/vcs.xml
+/local.properties
+.DS_Store
+/build
+/captures
+/.idea/workspace.xml
+
+>>>>>>> 94100c58103a71f31edbf69bacdb0dff53318d48
